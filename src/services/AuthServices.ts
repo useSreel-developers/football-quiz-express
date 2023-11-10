@@ -56,6 +56,7 @@ export default new (class AuthServices {
       user.id = uuidv4();
       user.fullname = data?.name || "";
       user.email = data?.email || "";
+      user.google_id = req.body.tokenId;
       await this.UserRepository.save(user);
 
       const token = jwt.sign({ id: user.id }, Env.JWT_SECRET, {
@@ -79,6 +80,14 @@ export default new (class AuthServices {
         where: {
           id: res.locals.auth.id,
         },
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          avatar: true,
+          created_at: true,
+          updated_at: true,
+        },
       });
 
       if (!userSelected) {
@@ -92,10 +101,7 @@ export default new (class AuthServices {
         code: 200,
         status: "success",
         message: "Token Is Valid",
-        data: {
-          ...userSelected,
-          password: null,
-        },
+        data: userSelected,
       });
     } catch (error) {
       return handleError(res, error);

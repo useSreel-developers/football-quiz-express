@@ -11,6 +11,9 @@ export class User {
   @PrimaryColumn({ type: "uuid" })
     id!: string;
 
+  @Column()
+    google_id!: string;
+
   @Column({ length: 100 })
     fullname!: string;
 
@@ -18,7 +21,7 @@ export class User {
     email!: string;
 
   @Column({ type: "text", nullable: true })
-    profile_picture!: string;
+    avatar!: string;
 
   @CreateDateColumn({ type: "timestamp with time zone" })
     created_at!: Date;
