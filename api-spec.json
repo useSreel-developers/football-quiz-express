@@ -230,6 +230,119 @@
           }
         ]
       }
+    },
+    "/update-profile": {
+      "put": {
+        "summary": "Update Profile",
+        "tags": [
+          "User"
+        ],
+        "description": "This endpoint is used to update user data fullname and avatar.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              },
+              "examples": {
+                "User 1": {
+                  "description": "Update Profile Request Body Example 1",
+                  "value": {
+                    "fullName": "Andry Pebrianto",
+                    "avatar": "https://res.cloudinary.com/dogz0yvva/image/upload/v1698908295/nibiru-cloud-storage/qzgmgjmxwxbzvvzspwbz.png"
+                  }
+                },
+                "User 2": {
+                  "description": "Update Profile Request Body Example 2",
+                  "value": {
+                    "fullName": "Bagas Ihwaludin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update Profile Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                },
+                "example": {
+                  "code": 200,
+                  "status": "success",
+                  "message": "Update Profile Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 400,
+                  "status": "failed",
+                  "message": "Validation Failed",
+                  "error": "\"fullName\" is required"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 401,
+                  "status": "failed",
+                  "message": "Access Unauthorized",
+                  "error": "JWT Token Invalid"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 500,
+                  "status": "failed",
+                  "message": "Internal Server Error",
+                  "error": "An unknown error occurred"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer Token": []
+          }
+        ]
+      }
     }
   },
   "components": {
