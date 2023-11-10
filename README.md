@@ -10,7 +10,6 @@ This is a Service API repository for Football Quiz. This Restful API is built us
 - [PostgreSQL](https://www.postgresql.org/)
 - [TypeORM](https://typeorm.io/)
 - [JWT](https://jwt.io/)
-- [Redis](https://redis.io/)
 
 ## Getting Started
 
@@ -32,9 +31,7 @@ DB_NAME=
 
 JWT_SECRET=
 
-REDIS_PORT=
-REDIS_HOST=
-REDIS_PASSWORD=
+GOOGLE_CLIENT_ID=
 ```
 
 - Migrate database using `yarn run migrate:up`
@@ -47,7 +44,7 @@ REDIS_PASSWORD=
 
 ## Related Project
 
-- [Circle App Mobile](https://github.com/useSreel-developers/football-quiz-mobile.git)
+- [Football Quiz App Mobile](https://github.com/useSreel-developers/football-quiz-mobile.git)
 
 ## Authors
 
