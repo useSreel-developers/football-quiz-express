@@ -5,8 +5,9 @@ import swaggerUi from "swagger-ui-express";
 import handleError from "../utils/exception/handleError";
 import NotFoundError from "../utils/exception/custom/NotFoundError";
 
-import AuthRoutes from "../routes/AuthRoutes";
 import apiSpec from "../utils/swagger/apiSpec";
+import AuthRoutes from "../routes/AuthRoutes";
+import UserRoutes from "../routes/UserRoutes";
 
 const createServer: Express = express();
 
@@ -21,6 +22,7 @@ createServer.get("/", (req: Request, res: Response): Response<string> => {
 createServer.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiSpec));
 
 createServer.use("/api/v1", AuthRoutes);
+createServer.use("/api/v1", UserRoutes);
 
 createServer.use((req: Request, res: Response): Response<string> => {
   return handleError(
