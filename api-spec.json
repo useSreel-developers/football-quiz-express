@@ -1,0 +1,299 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Football Quiz API Documentation",
+    "description": "OpenAPI which contains complete documentation about all endpoints that can be used in this RESTful API.",
+    "contact": {
+      "name": "Andry Pebrianto",
+      "url": "https://andrypebrianto.netlify.app",
+      "email": "andryforwork227@gmail.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/license/mit"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5425/api/v1",
+      "description": "Development API v1"
+    }
+  ],
+  "paths": {
+    "/google-auth": {
+      "post": {
+        "summary": "Google Auth",
+        "tags": [
+          "Auth"
+        ],
+        "description": "This endpoint is used to register and/or get jwt token for login with google auth.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tokenId": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "User 1": {
+                  "description": "Google Auth Request Body Example 1",
+                  "value": {
+                    "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4MzNlOGE3ZmUzZmU0Yjg3ODk0ODIxOWExNjg0YWZhMzczY2E4NmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQyNjI3NjM0Mjk3MDI2NjkyMDMiLCJlbWFpbCI6InJlc2FtYTIyN0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNjk5NjAzMjUyLCJuYW1lIjoiUmVzYW1hMjI3IFZOViIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NLRk9POTZYUFRVcnhZMk5YeFlyRThlUF9uR2ZhZ2d1Yml4YmtQQUJIQlg9czk2LWMiLCJnaXZlbl9uYW1lIjoiUmVzYW1hMjI3IiwiZmFtaWx5X25hbWUiOiJWTlYiLCJsb2NhbGUiOiJpZCIsImlhdCI6MTY5OTYwMzU1MiwiZXhwIjoxNjk5NjA3MTUyLCJqdGkiOiJiMjViODMxZmU2YWRmZWQ4MTNiZTQ2OGJjMTgzYTY4ZDFkNWRmMjQ1In0.rc3OKMMHl8cMMcYa8dfGl1TBfmz0P7HErupa9g9IwkKf3Ww93AITz4i2AshJQaDYY_T2lAB0FMcac05q174pi0pCgMVDGD5XOtpenG43fQTOachAAFECzlBsnSEk4KdVKy7pL6EVVJpRBZzv9wTS44t4ljegsyQRwqOWOhLOcGnJtyRzzeqWEC-bJvym4urbFT44ZhUVIfm-LENTk_4o1TvVDkdAaBfM43qt-VKfrkLPOpjrlyr7U-kOmS_2IcHi8vXcbksf5RUagijMf7qL9CP2QdYdaXAz9h_WQBUiOlV-CRQ5CsRYZ4IIiP0xg0E87JxC6new5plUIljeWQOj4A"
+                  }
+                },
+                "User 2": {
+                  "description": "Google Auth Request Body Example 2",
+                  "value": {
+                    "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4MzNlOGE3ZmUzZmU0Yjg3ODk0ODIxOWExNjg0YWZhMzczY2E4NmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTE1NzUzNzY2NTYyMzE5MTA3MTAiLCJlbWFpbCI6ImFuZHJ5cGViMjI3QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE2OTk2MTE0OTMsIm5hbWUiOiJBbmRyeSBQZWJyaWFudG8iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTE1vZ0ZpYUZSbUgwUXFFS2gxMkpEVkJ6bjJKVEhpUV9URmdtZDhYTm81Umc9czk2LWMiLCJnaXZlbl9uYW1lIjoiQW5kcnkiLCJmYW1pbHlfbmFtZSI6IlBlYnJpYW50byIsImxvY2FsZSI6ImlkIiwiaWF0IjoxNjk5NjExNzkzLCJleHAiOjE2OTk2MTUzOTMsImp0aSI6IjE3YTk5ODY5MDcyOWU3NzdhZTM3YWU3NzI1YTc0Y2I3NDE3YmY1MmUifQ.rooHf4Kbqujnb8hSoTvPZQlFwISbZJZR0xPezOsH0PKuDOSFQAHl0H5so2PRK1GOKBt6R9eqVtGByouzV7vzK_0HZOJTaphTqYs5iQjfbeDFxJQgvDb9e8ZwWD-LetEwMHv3NAcJcTV5fMDKS2oPJCxe_XJ414oA3mRudw14frcEqhKS68Bd4PRelZ0jLsl3ohAERMePew0-Q4gXOxzbFLfPPT2ep5Lm10SNjFUen4gtWdklxjKHjl2JnI1ZlW56LZRDC3_y7m3ey77NDhbvlnFsUkfuoc9uZF68-AqAI1KWfSPFr8AweoEb55Sw7W6ri26E7L1tieqth0tFR05xFg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessWithToken"
+                },
+                "example": {
+                  "code": 200,
+                  "status": "success",
+                  "message": "Login Success",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3ZjI2ZWI4LWU3ZWUtNGY0Mi1hN2VlLWMxYjg4ZDViM2EzNyIsImlhdCI6MTY5OTYxMjk0NywiZXhwIjoxNzAwMjE3NzQ3fQ.TYQQXUyQoW_3htIr_ovTFV4y6zr7fnTjanexylYyZLU"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Register Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessWithToken"
+                },
+                "example": {
+                  "code": 201,
+                  "status": "success",
+                  "message": "Register Success",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3ZjI2ZWI4LWU3ZWUtNGY0Mi1hN2VlLWMxYjg4ZDViM2EzNyIsImlhdCI6MTY5OTYxMjk2NywiZXhwIjoxNzAwMjE3NzY3fQ.2SK1ws-lDTybiLIyppr39KWnHLQ3Cl7XlkcX33oVAjQ"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 400,
+                  "status": "failed",
+                  "message": "Validation Failed",
+                  "error": "\"tokenId\" is required"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 500,
+                  "status": "failed",
+                  "message": "Internal Server Error",
+                  "error": "An unknown error occurred"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check": {
+      "get": {
+        "summary": "Check Token",
+        "tags": [
+          "Auth"
+        ],
+        "description": "This endpoint is used to check whether the jwt token is still valid or not, also getting user data.",
+        "responses": {
+          "200": {
+            "description": "Token Is Valid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "fullname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "profile_picture": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "nullable": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "status": "success",
+                  "message": "Token Is Valid",
+                  "data": {
+                    "id": "29629c0c-ea61-4868-8ba9-22540c605e44",
+                    "fullname": "Andry Pebrianto",
+                    "email": "andrypeb227@gmail.com",
+                    "profile_picture": null,
+                    "created_at": "2023-11-10T10:34:25.761Z",
+                    "updated_at": "2023-11-10T10:34:25.761Z",
+                    "password": null
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 401,
+                  "status": "failed",
+                  "message": "Access Unauthorized",
+                  "error": "JWT Token Invalid"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 500,
+                  "status": "failed",
+                  "message": "Internal Server Error",
+                  "error": "An unknown error occurred"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer Token": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Success": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessWithToken": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Failure": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer Token": {
+        "description": "Token To Authorized Private Endpoint",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
