@@ -16,6 +16,10 @@
   },
   "servers": [
     {
+      "url": "https://football-quiz.onrender.com/api/v1",
+      "description": "Production API v1"
+    },
+    {
       "url": "http://localhost:5427/api/v1",
       "description": "Development API v1"
     }
