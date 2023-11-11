@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 import Env from "../src/utils/variables/Env";
 import { User } from "./entities/User";
 import { Avatar } from "./entities/Avatar";
+import { MigrationFile1699697199551 } from "./migration/1699697199551-MigrationFile";
 
 export const PostgreDataSource = new DataSource({
   type: "postgres",
@@ -14,6 +15,6 @@ export const PostgreDataSource = new DataSource({
   synchronize: Env.NODE_ENV === "prod" ? false : true,
   logging: Env.NODE_ENV === "prod" ? false : true,
   entities: [User, Avatar],
-  migrations: [],
+  migrations: [MigrationFile1699697199551],
   subscribers: [],
 });
