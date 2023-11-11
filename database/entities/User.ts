@@ -4,14 +4,17 @@ import {
   PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
+import { Avatar } from "./Avatar";
 
 @Entity("users")
 export class User {
   @PrimaryColumn({ type: "uuid" })
     id!: string;
 
-  @Column()
+  @Column({ type: "text" })
     google_id!: string;
 
   @Column({ length: 100 })
@@ -20,12 +23,17 @@ export class User {
   @Column({ length: 50 })
     email!: string;
 
-  @Column({ type: "text", nullable: true })
-    avatar!: string;
-
   @CreateDateColumn({ type: "timestamp with time zone" })
     created_at!: Date;
 
   @UpdateDateColumn({ type: "timestamp with time zone" })
     updated_at!: Date;
+
+  @ManyToOne(() => Avatar, (avatar) => avatar.users, {
+    onUpdate: "SET NULL",
+    onDelete: "SET NULL",
+    nullable: true,
+  })
+  @JoinColumn({ name: "avatar_id" }) // untuk membuat foreignkey
+    avatar!: Avatar;
 }
