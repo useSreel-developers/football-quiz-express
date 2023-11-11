@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Repository } from "typeorm";
-import { OAuth2Client } from "google-auth-library";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import Env from "../utils/variables/Env";
@@ -16,24 +15,18 @@ export default new (class AuthServices {
 
   async googleAuth(req: Request, res: Response): Promise<Response> {
     try {
-      const client = new OAuth2Client(Env.GOOGLE_CLIENT_ID);
+      const { name, email, emailVerified } = req.body;
 
-      const response = await client.verifyIdToken({
-        idToken: req.body.tokenId,
-        audience: Env.GOOGLE_CLIENT_ID,
-      });
-      const data = response.getPayload();
-
-      if (!data?.email_verified) {
+      if (!emailVerified) {
         throw new BadRequestError(
-          `Email ${data?.email} not verified by google`,
+          `Email ${email} not verified by google`,
           "Email Not verified"
         );
       }
 
       const userSelected = await this.UserRepository.findOne({
         where: {
-          email: data?.email,
+          email,
         },
       });
 
@@ -54,9 +47,8 @@ export default new (class AuthServices {
       // Jika user belum ada (REGISTER)
       const user = new User();
       user.id = uuidv4();
-      user.fullname = data?.name || "";
-      user.email = data?.email || "";
-      user.google_id = req.body.tokenId;
+      user.name = name || "";
+      user.email = email || "";
       await this.UserRepository.save(user);
 
       const token = jwt.sign({ id: user.id }, Env.JWT_SECRET, {
@@ -80,11 +72,12 @@ export default new (class AuthServices {
         where: {
           id: res.locals.auth.id,
         },
+        relations: ["avatar"],
         select: {
           id: true,
-          fullname: true,
+          name: true,
           email: true,
-          avatar: true,
+          diamond: true,
           created_at: true,
           updated_at: true,
         },

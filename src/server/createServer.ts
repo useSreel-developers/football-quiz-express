@@ -21,8 +21,8 @@ createServer.get("/", (req: Request, res: Response): Response<string> => {
 
 createServer.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiSpec));
 
-// createServer.use("/api/v1", AuthRoutes);
-// createServer.use("/api/v1", UserRoutes);
+createServer.use("/api/v1", AuthRoutes);
+createServer.use("/api/v1", UserRoutes);
 
 createServer.use((req: Request, res: Response): Response<string> => {
   return handleError(

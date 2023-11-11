@@ -1,5 +1,7 @@
 import Joi from "joi";
 
 export const googleAuthSchema = Joi.object({
-  tokenId: Joi.string().required(),
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  emailVerified: Joi.boolean().required(),
 });

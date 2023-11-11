@@ -14,14 +14,14 @@ export class User {
   @PrimaryColumn({ type: "uuid" })
     id!: string;
 
-  @Column({ type: "text" })
-    google_id!: string;
-
   @Column({ length: 100 })
-    fullname!: string;
+    name!: string;
 
   @Column({ length: 50 })
     email!: string;
+
+  @Column({ default: 0 })
+    diamond!: number;
 
   @CreateDateColumn({ type: "timestamp with time zone" })
     created_at!: Date;
