@@ -35,8 +35,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "tokenId": {
+                  "name": {
                     "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "emailVerified": {
+                    "type": "boolean"
                   }
                 }
               },
@@ -44,13 +50,17 @@
                 "User 1": {
                   "description": "Google Auth Request Body Example 1",
                   "value": {
-                    "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4MzNlOGE3ZmUzZmU0Yjg3ODk0ODIxOWExNjg0YWZhMzczY2E4NmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTQyNjI3NjM0Mjk3MDI2NjkyMDMiLCJlbWFpbCI6InJlc2FtYTIyN0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNjk5NjAzMjUyLCJuYW1lIjoiUmVzYW1hMjI3IFZOViIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NLRk9POTZYUFRVcnhZMk5YeFlyRThlUF9uR2ZhZ2d1Yml4YmtQQUJIQlg9czk2LWMiLCJnaXZlbl9uYW1lIjoiUmVzYW1hMjI3IiwiZmFtaWx5X25hbWUiOiJWTlYiLCJsb2NhbGUiOiJpZCIsImlhdCI6MTY5OTYwMzU1MiwiZXhwIjoxNjk5NjA3MTUyLCJqdGkiOiJiMjViODMxZmU2YWRmZWQ4MTNiZTQ2OGJjMTgzYTY4ZDFkNWRmMjQ1In0.rc3OKMMHl8cMMcYa8dfGl1TBfmz0P7HErupa9g9IwkKf3Ww93AITz4i2AshJQaDYY_T2lAB0FMcac05q174pi0pCgMVDGD5XOtpenG43fQTOachAAFECzlBsnSEk4KdVKy7pL6EVVJpRBZzv9wTS44t4ljegsyQRwqOWOhLOcGnJtyRzzeqWEC-bJvym4urbFT44ZhUVIfm-LENTk_4o1TvVDkdAaBfM43qt-VKfrkLPOpjrlyr7U-kOmS_2IcHi8vXcbksf5RUagijMf7qL9CP2QdYdaXAz9h_WQBUiOlV-CRQ5CsRYZ4IIiP0xg0E87JxC6new5plUIljeWQOj4A"
+                    "name": "Andry Pebrianto",
+                    "email": "aswassaw227@gmail.com",
+                    "emailVerified": true
                   }
                 },
                 "User 2": {
                   "description": "Google Auth Request Body Example 2",
                   "value": {
-                    "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImY4MzNlOGE3ZmUzZmU0Yjg3ODk0ODIxOWExNjg0YWZhMzczY2E4NmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5MDExNTE2MzIxMTgtaTJranBwZXBsdG81YWRlZDA5ZmxqZ2lsdm5odW5lbWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTE1NzUzNzY2NTYyMzE5MTA3MTAiLCJlbWFpbCI6ImFuZHJ5cGViMjI3QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE2OTk2MTE0OTMsIm5hbWUiOiJBbmRyeSBQZWJyaWFudG8iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTE1vZ0ZpYUZSbUgwUXFFS2gxMkpEVkJ6bjJKVEhpUV9URmdtZDhYTm81Umc9czk2LWMiLCJnaXZlbl9uYW1lIjoiQW5kcnkiLCJmYW1pbHlfbmFtZSI6IlBlYnJpYW50byIsImxvY2FsZSI6ImlkIiwiaWF0IjoxNjk5NjExNzkzLCJleHAiOjE2OTk2MTUzOTMsImp0aSI6IjE3YTk5ODY5MDcyOWU3NzdhZTM3YWU3NzI1YTc0Y2I3NDE3YmY1MmUifQ.rooHf4Kbqujnb8hSoTvPZQlFwISbZJZR0xPezOsH0PKuDOSFQAHl0H5so2PRK1GOKBt6R9eqVtGByouzV7vzK_0HZOJTaphTqYs5iQjfbeDFxJQgvDb9e8ZwWD-LetEwMHv3NAcJcTV5fMDKS2oPJCxe_XJ414oA3mRudw14frcEqhKS68Bd4PRelZ0jLsl3ohAERMePew0-Q4gXOxzbFLfPPT2ep5Lm10SNjFUen4gtWdklxjKHjl2JnI1ZlW56LZRDC3_y7m3ey77NDhbvlnFsUkfuoc9uZF68-AqAI1KWfSPFr8AweoEb55Sw7W6ri26E7L1tieqth0tFR05xFg"
+                    "name": "Bagas Ihwaludin",
+                    "email": "bagas225@gmail.com",
+                    "emailVerified": false
                   }
                 }
               }
@@ -101,7 +111,7 @@
                   "code": 400,
                   "status": "failed",
                   "message": "Validation Failed",
-                  "error": "\"tokenId\" is required"
+                  "error": "\"name\" is required"
                 }
               }
             }
@@ -162,8 +172,28 @@
                           "type": "string"
                         },
                         "avatar": {
-                          "type": "string",
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "avatar_url": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "number"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
                           "nullable": true
+                        },
+                        "diamond": {
+                          "type": "number"
                         },
                         "created_at": {
                           "type": "string"
@@ -180,12 +210,13 @@
                   "status": "success",
                   "message": "Token Is Valid",
                   "data": {
-                    "id": "9eb6fc97-b84e-4d6c-9dcc-b090862a5e16",
-                    "fullname": "Andry Pebrianto",
-                    "email": "andrypeb227@gmail.com",
-                    "avatar": null,
-                    "created_at": "2023-11-10T13:09:29.521Z",
-                    "updated_at": "2023-11-10T13:09:29.521Z"
+                    "id": "979688ea-7ab7-4e86-9165-25d94c6b9885",
+                    "name": "Andry Pebrianto",
+                    "email": "aswassaw227@gmail.com",
+                    "diamond": 0,
+                    "created_at": "2023-11-11T08:56:13.959Z",
+                    "updated_at": "2023-11-11T08:56:13.959Z",
+                    "avatar": null
                   }
                 }
               }
@@ -237,7 +268,7 @@
         "tags": [
           "User"
         ],
-        "description": "This endpoint is used to update user data fullname and avatar.",
+        "description": "This endpoint is used to update user data name and avatar.",
         "requestBody": {
           "required": true,
           "content": {
@@ -245,7 +276,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "fullName": {
+                  "name": {
                     "type": "string"
                   },
                   "avatar": {
@@ -258,14 +289,14 @@
                 "User 1": {
                   "description": "Update Profile Request Body Example 1",
                   "value": {
-                    "fullName": "Andry Pebrianto",
-                    "avatar": "https://res.cloudinary.com/dogz0yvva/image/upload/v1698908295/nibiru-cloud-storage/qzgmgjmxwxbzvvzspwbz.png"
+                    "name": "Andry Pebrianto",
+                    "avatar": "060b0ae8-b626-4f4a-b357-3a7115021624"
                   }
                 },
                 "User 2": {
                   "description": "Update Profile Request Body Example 2",
                   "value": {
-                    "fullName": "Bagas Ihwaludin"
+                    "name": "Bagas Ihwaludin"
                   }
                 }
               }
