@@ -16,6 +16,9 @@ export class Avatar {
   @Column({ type: "text" })
     avatar_url!: string;
 
+  @Column({ length: 50 })
+    avatar_name!: string;
+
   @Column({ default: 0 })
     price!: number;
 
