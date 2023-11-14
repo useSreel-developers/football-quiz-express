@@ -8,6 +8,7 @@ import NotFoundError from "../utils/exception/custom/NotFoundError";
 import apiSpec from "../utils/swagger/apiSpec";
 import AuthRoutes from "../routes/AuthRoutes";
 import UserRoutes from "../routes/UserRoutes";
+import AvatarRoutes from "../routes/AvatarRoutes";
 
 const createServer: Express = express();
 
@@ -23,6 +24,7 @@ createServer.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(apiSpec));
 
 createServer.use("/api/v1", AuthRoutes);
 createServer.use("/api/v1", UserRoutes);
+createServer.use("/api/v1", AvatarRoutes);
 
 createServer.use((req: Request, res: Response): Response<string> => {
   return handleError(
