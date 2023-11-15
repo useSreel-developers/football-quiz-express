@@ -7,7 +7,6 @@ import { PostgreDataSource } from "../../database/data-source";
 import { User } from "../../database/entities/User";
 import handleError from "../utils/exception/handleError";
 import NotFoundError from "../utils/exception/custom/NotFoundError";
-import BadRequestError from "../utils/exception/custom/BadRequestError";
 
 export default new (class AuthServices {
   private readonly UserRepository: Repository<User> =
@@ -15,14 +14,7 @@ export default new (class AuthServices {
 
   async googleAuth(req: Request, res: Response): Promise<Response> {
     try {
-      const { name, email, emailVerified } = req.body;
-
-      if (!emailVerified) {
-        throw new BadRequestError(
-          `Email ${email} not verified by google`,
-          "Email Not verified"
-        );
-      }
+      const { name, email } = req.body;
 
       const userSelected = await this.UserRepository.findOne({
         where: {

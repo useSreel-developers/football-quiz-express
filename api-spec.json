@@ -44,9 +44,6 @@
                   },
                   "email": {
                     "type": "string"
-                  },
-                  "emailVerified": {
-                    "type": "boolean"
                   }
                 }
               },
@@ -55,16 +52,14 @@
                   "description": "Google Auth Request Body Example 1",
                   "value": {
                     "name": "Andry Pebrianto",
-                    "email": "aswassaw227@gmail.com",
-                    "emailVerified": true
+                    "email": "aswassaw227@gmail.com"
                   }
                 },
                 "User 2": {
                   "description": "Google Auth Request Body Example 2",
                   "value": {
                     "name": "Bagas Ihwaludin",
-                    "email": "bagas225@gmail.com",
-                    "emailVerified": false
+                    "email": "bagas225@gmail.com"
                   }
                 }
               }
