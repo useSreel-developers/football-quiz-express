@@ -59,16 +59,16 @@ export default function socketController(
           rooms.push({
             roomId,
             answers: {
-              question1: { ...question },
-              // question2: { ...question },
-              // question3: { ...question },
-              // question4: { ...question },
-              // question5: { ...question },
-              // question6: { ...question },
-              // question7: { ...question },
-              // question8: { ...question },
-              // question9: { ...question },
-              // question10: { ...question },
+              question1: question,
+              question2: question,
+              question3: question,
+              question4: question,
+              question5: question,
+              question6: question,
+              question7: question,
+              question8: question,
+              question9: question,
+              question10: question,
             },
           });
 
@@ -82,15 +82,15 @@ export default function socketController(
               })),
               answers: {
                 question1: { ...question },
-                // question2: { ...question },
-                // question3: { ...question },
-                // question4: { ...question },
-                // question5: { ...question },
-                // question6: { ...question },
-                // question7: { ...question },
-                // question8: { ...question },
-                // question9: { ...question },
-                // question10: { ...question },
+                question2: { ...question },
+                question3: { ...question },
+                question4: { ...question },
+                question5: { ...question },
+                question6: { ...question },
+                question7: { ...question },
+                question8: { ...question },
+                question9: { ...question },
+                question10: { ...question },
               },
             });
           }
@@ -117,24 +117,25 @@ export default function socketController(
     }) => {
       try {
         if (rooms.filter((room) => room.roomId === data.roomId).length) {
-          rooms = rooms.map((room) => {
-            // cek room yang dimaksudkan
-            if (room.roomId === data.roomId) {
-              room.answers[data.question.no][data.role] = data.question.status;
-              return room;
-            }
-            return room;
-          });
-
-          io.to(data.roomId).emit("playerAnswered", {
-            answer: rooms.filter((room) => room.roomId === data.roomId)[0],
-          });
-
           if (
-            !checkStillNull(
+            checkStillNull(
               rooms.filter((room) => room.roomId === data.roomId)[0].answers
             )
           ) {
+            rooms = rooms.map((room) => {
+              // cek room yang dimaksudkan
+              if (room.roomId === data.roomId) {
+                room.answers[data.question.no][data.role] =
+                  data.question.status;
+                return room;
+              }
+              return room;
+            });
+
+            io.to(data.roomId).emit("playerAnswered", {
+              answer: rooms.filter((room) => room.roomId === data.roomId)[0],
+            });
+          } else {
             const roleScore = {
               red: {
                 correct: 0,
@@ -162,35 +163,33 @@ export default function socketController(
               (item) => item.roomId === data.roomId
             );
             const roomMatchSelected = rooms.splice(indexToDelete, 1)[0].answers;
-            // for (const prop of Object.keys(roomMatchSelected.answers)) {
-            //   if (roomMatchSelected[prop].red) {
-            //     roleScore.red.correct += 1;
-            //   } else {
-            //     roleScore.red.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].green) {
-            //     roleScore.green.correct += 1;
-            //   } else {
-            //     roleScore.green.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].blue) {
-            //     roleScore.blue.correct += 1;
-            //   } else {
-            //     roleScore.blue.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].yellow) {
-            //     roleScore.yellow.correct += 1;
-            //   } else {
-            //     roleScore.yellow.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].black) {
-            //     roleScore.black.correct += 1;
-            //   } else {
-            //     roleScore.black.wrong += 1;
-            //   }
-            // }
-            console.log(roomMatchSelected);
-            console.log(rooms);
+            for (const prop of Object.keys(roomMatchSelected.answers)) {
+              if (roomMatchSelected[prop].red) {
+                roleScore.red.correct += 1;
+              } else {
+                roleScore.red.wrong += 1;
+              }
+              if (roomMatchSelected[prop].green) {
+                roleScore.green.correct += 1;
+              } else {
+                roleScore.green.wrong += 1;
+              }
+              if (roomMatchSelected[prop].blue) {
+                roleScore.blue.correct += 1;
+              } else {
+                roleScore.blue.wrong += 1;
+              }
+              if (roomMatchSelected[prop].yellow) {
+                roleScore.yellow.correct += 1;
+              } else {
+                roleScore.yellow.wrong += 1;
+              }
+              if (roomMatchSelected[prop].black) {
+                roleScore.black.correct += 1;
+              } else {
+                roleScore.black.wrong += 1;
+              }
+            }
 
             io.to(data.roomId).emit("gameOver", {
               score: roleScore,
