@@ -60,15 +60,15 @@ export default function socketController(
             roomId,
             answers: {
               question1: { ...question },
-              // question2: { ...question },
-              // question3: { ...question },
-              // question4: { ...question },
-              // question5: { ...question },
-              // question6: { ...question },
-              // question7: { ...question },
-              // question8: { ...question },
-              // question9: { ...question },
-              // question10: { ...question },
+              question2: { ...question },
+              question3: { ...question },
+              question4: { ...question },
+              question5: { ...question },
+              question6: { ...question },
+              question7: { ...question },
+              question8: { ...question },
+              question9: { ...question },
+              question10: { ...question },
             },
           });
 
@@ -82,15 +82,15 @@ export default function socketController(
               })),
               answers: {
                 question1: { ...question },
-                // question2: { ...question },
-                // question3: { ...question },
-                // question4: { ...question },
-                // question5: { ...question },
-                // question6: { ...question },
-                // question7: { ...question },
-                // question8: { ...question },
-                // question9: { ...question },
-                // question10: { ...question },
+                question2: { ...question },
+                question3: { ...question },
+                question4: { ...question },
+                question5: { ...question },
+                question6: { ...question },
+                question7: { ...question },
+                question8: { ...question },
+                question9: { ...question },
+                question10: { ...question },
               },
             });
           }
@@ -162,35 +162,37 @@ export default function socketController(
               (item) => item.roomId === data.roomId
             );
             const roomMatchSelected = rooms.splice(indexToDelete, 1)[0].answers;
-            // for (const prop of Object.keys(roomMatchSelected.answers)) {
-            //   if (roomMatchSelected[prop].red) {
-            //     roleScore.red.correct += 1;
-            //   } else {
-            //     roleScore.red.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].green) {
-            //     roleScore.green.correct += 1;
-            //   } else {
-            //     roleScore.green.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].blue) {
-            //     roleScore.blue.correct += 1;
-            //   } else {
-            //     roleScore.blue.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].yellow) {
-            //     roleScore.yellow.correct += 1;
-            //   } else {
-            //     roleScore.yellow.wrong += 1;
-            //   }
-            //   if (roomMatchSelected[prop].black) {
-            //     roleScore.black.correct += 1;
-            //   } else {
-            //     roleScore.black.wrong += 1;
-            //   }
-            // }
-            console.log(roomMatchSelected);
-            console.log(rooms);
+            for (const propAnswer in roomMatchSelected) {
+              if (roomMatchSelected[propAnswer].red) {
+                roleScore.red.correct += 1;
+              } else {
+                roleScore.red.wrong += 1;
+              }
+
+              if (roomMatchSelected[propAnswer].green) {
+                roleScore.green.correct += 1;
+              } else {
+                roleScore.green.wrong += 1;
+              }
+
+              if (roomMatchSelected[propAnswer].blue) {
+                roleScore.blue.correct += 1;
+              } else {
+                roleScore.blue.wrong += 1;
+              }
+
+              if (roomMatchSelected[propAnswer].yellow) {
+                roleScore.yellow.correct += 1;
+              } else {
+                roleScore.yellow.wrong += 1;
+              }
+
+              if (roomMatchSelected[propAnswer].black) {
+                roleScore.black.correct += 1;
+              } else {
+                roleScore.black.wrong += 1;
+              }
+            }
 
             io.to(data.roomId).emit("gameOver", {
               score: roleScore,
