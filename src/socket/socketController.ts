@@ -75,6 +75,8 @@ export default function socketController(
           for (let i = 0; i < fivePlayerSelectedToMatch.length; i++) {
             fivePlayerSelectedToMatch[i].socket.join(roomId);
             fivePlayerSelectedToMatch[i].socket.emit("matchFound", {
+              message: "Match Found",
+              socketId: fivePlayerSelectedToMatch[i].socket.id,
               roomId,
               players: fivePlayerSelectedToMatch.map((player, index) => ({
                 role: colors[index],
@@ -97,6 +99,7 @@ export default function socketController(
         } else {
           socket.emit("findingMatch", {
             message: "Finding Match, Please Wait",
+            socketId: socket.id,
           });
         }
       }
@@ -105,28 +108,30 @@ export default function socketController(
     }
   });
 
-  socket.on("answerQuestion",
+  socket.on(
+    "answerQuestion",
     (data: {
       roomId: string;
       role: string;
-      question: {
-        no: number;
-        status: boolean;
-      };
+      questionSection: number;
+      statusAnswer: boolean;
     }) => {
       try {
         if (rooms.filter((room) => room.roomId === data.roomId).length) {
           rooms = rooms.map((room) => {
             // cek room yang dimaksudkan
             if (room.roomId === data.roomId) {
-              room.answers[data.question.no][data.role] = data.question.status;
+              room.answers[data.questionSection][data.role] = data.statusAnswer;
               return room;
             }
             return room;
           });
 
           io.to(data.roomId).emit("playerAnswered", {
-            answer: rooms.filter((room) => room.roomId === data.roomId)[0],
+            message: `A Player Answers`,
+            answers: {
+              ...rooms.filter((room) => room.roomId === data.roomId)[0],
+            },
           });
 
           if (
@@ -194,6 +199,7 @@ export default function socketController(
             }
 
             io.to(data.roomId).emit("gameOver", {
+              message: "Game Over",
               score: roleScore,
             });
           }
