@@ -37,7 +37,11 @@ createServer.use((req: Request, res: Response): Response<string> => {
 });
 
 const mainServer = http.createServer(createServer);
-const io = new SocketServer(mainServer);
+const io = new SocketServer(mainServer, {
+  cors: {
+    origin: "*",
+  },
+});
 io.on("connection", (socket: Socket) => {
   console.log(`Client with id ${socket.id} connected!`);
 

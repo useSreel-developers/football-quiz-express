@@ -10,7 +10,7 @@ type PlayerType = {
   playerId: string;
 };
 
-const waitingPlayers: PlayerType[] = [];
+let waitingPlayers: PlayerType[] = [];
 // WAITING PLAYERS
 
 // ANSWERS
@@ -105,8 +105,7 @@ export default function socketController(
     }
   });
 
-  socket.on(
-    "answerQuestion",
+  socket.on("answerQuestion",
     (data: {
       roomId: string;
       role: string;
@@ -204,6 +203,14 @@ export default function socketController(
       }
     }
   );
+
+  socket.on("disconnect", () => {
+    waitingPlayers = waitingPlayers.filter(
+      (player) => player.socketId !== socket.id
+    );
+
+    console.log(`Client with id ${socket.id} disconnected!`);
+  });
 }
 
 function checkStillNull(answer: Answers) {
