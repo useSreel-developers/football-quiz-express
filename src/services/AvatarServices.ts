@@ -10,7 +10,11 @@ export default new (class AvatarServices {
 
   async findAllAvatars(req: Request, res: Response): Promise<Response> {
     try {
-      const avatars: Avatar[] = await this.AvatarRepository.find();
+      const avatars: Avatar[] = await this.AvatarRepository.find({
+        order: {
+          price: "ASC",
+        },
+      });
 
       return res.status(200).json({
         code: 200,
