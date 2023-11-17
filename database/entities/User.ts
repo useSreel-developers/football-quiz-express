@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { Avatar } from "./Avatar";
+import { Transaction } from "./Transaction";
 
 @Entity("users")
 export class User {
@@ -36,4 +38,7 @@ export class User {
   })
   @JoinColumn({ name: "avatar_id" }) // untuk membuat foreignkey
     avatar!: Avatar;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+    transactions!: Transaction[];
 }
