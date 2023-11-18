@@ -12,6 +12,8 @@ class Env {
   static DB_NAME: string = process.env.DB_NAME || "typeorm-db";
   static JWT_SECRET: string = process.env.JWT_SECRET || "jwt_secret";
   static GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || "google_client_id";
+  static MIDTRANS_CLIENT_KEY: string = process.env.MIDTRANS_CLIENT_KEY || "midtrans_client_key";
+  static MIDTRANS_SERVER_KEY: string = process.env.MIDTRANS_SERVER_KEY || "midtrans_server_key";
 }
 
 export default Env;
