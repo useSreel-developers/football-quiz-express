@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { User } from "./User";
 
@@ -30,4 +32,18 @@ export class Avatar {
 
   @OneToMany(() => User, (user) => user.avatar)
     users!: User[];
+
+  @ManyToMany(() => User, (user) => user.avatars_owned, { cascade: true })
+  @JoinTable({
+    name: "user_avatar",
+    joinColumn: {
+      name: "avatar_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "user_id",
+      referencedColumnName: "id",
+    },
+  })
+    avatar_owners!: User[];
 }
