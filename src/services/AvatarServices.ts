@@ -27,11 +27,17 @@ export default new (class AvatarServices {
         status: "success",
         message: "Find All Avatar Success",
         data: avatars.map((avatar) => {
-          const owned = Boolean(
-            avatar.avatar_owners.filter(
-              (owner) => owner.id === res.locals.auth.id
-            ).length
-          );
+          let owned = false;
+
+          if (avatar.price === 0) {
+            owned = true;
+          } else {
+            owned = Boolean(
+              avatar.avatar_owners.filter(
+                (owner) => owner.id === res.locals.auth.id
+              ).length
+            );
+          }
 
           return {
             id: avatar.id,
