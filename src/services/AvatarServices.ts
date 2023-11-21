@@ -14,13 +14,35 @@ export default new (class AvatarServices {
         order: {
           price: "ASC",
         },
+        relations: ["avatar_owners"],
+        select: {
+          avatar_owners: {
+            id: true,
+          },
+        },
       });
 
       return res.status(200).json({
         code: 200,
         status: "success",
         message: "Find All Avatar Success",
-        data: avatars,
+        data: avatars.map((avatar) => {
+          const owned = Boolean(
+            avatar.avatar_owners.filter(
+              (owner) => owner.id === res.locals.auth.id
+            ).length
+          );
+
+          return {
+            id: avatar.id,
+            avatar_url: avatar.avatar_url,
+            avatar_name: avatar.avatar_name,
+            price: avatar.price,
+            created_at: avatar.created_at,
+            updated_at: avatar.updated_at,
+            owned,
+          };
+        }),
       });
     } catch (error) {
       return handleError(res, error);

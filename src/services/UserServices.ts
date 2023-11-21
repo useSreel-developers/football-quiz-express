@@ -47,6 +47,7 @@ export default new (class UserServices {
           where: {
             id: avatar,
           },
+          relations: ["avatar_owners"],
         });
 
         if (!avatarSelected) {
@@ -56,7 +57,22 @@ export default new (class UserServices {
           );
         }
 
-        user.avatar = avatar;
+        if (avatarSelected.price > user.diamond) {
+          throw new BadRequestError(
+            `Your diamonds are not enough to buy this avatar`,
+            "Diamond Not Enough"
+          );
+        }
+
+        if (!avatarSelected.avatar_owners.filter((owner) => owner.id === user.id).length) {
+          user.diamond = user.diamond - avatarSelected.price;
+          await this.UserRepository.query(
+            "INSERT INTO user_avatar(user_id, avatar_id) VALUES($1, $2)",
+            [user.id, avatarSelected.id]
+          );
+        }
+
+        user.avatar = avatarSelected;
       }
       await this.UserRepository.save(user);
 
