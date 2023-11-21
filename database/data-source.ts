@@ -4,7 +4,7 @@ import Env from "../src/utils/variables/Env";
 import { User } from "./entities/User";
 import { Avatar } from "./entities/Avatar";
 import { Question } from "./entities/Question";
-import { MigrationFile1699840277073 } from "./migration/1699840277073-MigrationFile";
+import { MigrationFile1700543314606 } from "./migration/1700543314606-MigrationFile";
 
 export const PostgreDataSource = new DataSource({
   type: "postgres",
@@ -16,6 +16,6 @@ export const PostgreDataSource = new DataSource({
   synchronize: Env.NODE_ENV === "prod" ? false : true,
   logging: Env.NODE_ENV === "prod" ? false : true,
   entities: [User, Avatar, Question],
-  migrations: [MigrationFile1699840277073],
+  migrations: [MigrationFile1700543314606],
   subscribers: [],
 });
