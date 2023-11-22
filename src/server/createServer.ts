@@ -44,7 +44,8 @@ const io = new SocketServer(mainServer, {
 });
 io.on("connection", (socket: Socket) => {
   socket.join("global");
-
+  
+  console.log(`Client with ID ${socket.id} connected!`);
   socketController(io, socket);
 });
 
