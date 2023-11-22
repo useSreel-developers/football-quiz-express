@@ -44,7 +44,7 @@ class RoomsData {
             if (user.user.userId === userId) {
               return {
                 ...user,
-                score: score,
+                score: user.score + score,
               };
             }
 

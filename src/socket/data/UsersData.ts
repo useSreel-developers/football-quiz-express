@@ -3,8 +3,9 @@ import { Socket } from "socket.io";
 export type UserType = {
   userId: string;
   userName: string;
-  userAvatar: string;
-  socket: Socket;
+  userAvatar: string | null;
+  socket: Socket | null;
+  isBot: boolean;
 };
 
 class UsersData {
@@ -27,7 +28,13 @@ class UsersData {
   }
 
   deleteUser(socketId: string) {
-    this._users = this._users.filter((user) => user.socket.id !== socketId);
+    this._users = this._users.filter((user) => {
+      if (!user.isBot && user.socket) {
+        return user.socket.id !== socketId;
+      }
+
+      return user;
+    });
   }
 }
 
