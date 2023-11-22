@@ -1,7 +1,10 @@
+import http from "http";
 import express, { Express, Request, Response } from "express";
+import { Server as SocketServer, Socket } from "socket.io";
 import cors from "cors";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
+import socketController from "../socket/socketController";
 import handleError from "../utils/exception/handleError";
 import NotFoundError from "../utils/exception/custom/NotFoundError";
 
@@ -33,4 +36,17 @@ createServer.use((req: Request, res: Response): Response<string> => {
   );
 });
 
-export default createServer;
+const mainServer = http.createServer(createServer);
+const io = new SocketServer(mainServer, {
+  cors: {
+    origin: "*",
+  },
+});
+io.on("connection", (socket: Socket) => {
+  socket.join("global");
+  
+  console.log(`Client with ID ${socket.id} connected!`);
+  socketController(io, socket);
+});
+
+export default mainServer;
