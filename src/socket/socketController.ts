@@ -1,5 +1,6 @@
 import { Server as SocketServer, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
+import sleep from 'sleep-promise';
 import UsersData, { UserType } from "./data/UsersData";
 import RoomsData from "./data/RoomsData";
 
@@ -8,13 +9,17 @@ const usersWaiting = new UsersData();
 const rooms = new RoomsData();
 
 let roomBotFiller: NodeJS.Timeout | undefined = undefined;
+interface RoomTimeout {
+  [key: string]: NodeJS.Timeout | undefined;
+}
+const roomTimers: RoomTimeout = {};
 
 export default function socketController(
   io: SocketServer,
   socket: Socket
 ): void {
   // ### MATCHMAKING
-  socket.on("matchmaking", ({ userId, userName, userAvatar }) => {
+  socket.on("matchmaking", async ({ userId, userName, userAvatar }) => {
     if (!usersWaiting.checkUser(userId)) {
       usersWaiting.addUser({
         userId,
@@ -41,7 +46,7 @@ export default function socketController(
 
       if (roomBotFiller === undefined) {
         let time = 60;
-        roomBotFiller = setInterval(() => {
+        roomBotFiller = setInterval(async () => {
           usersWaiting.users.forEach((user: UserType) => {
             if (!user.isBot && user.socket) {
               user.socket.emit("findingMatchCountdown", {
@@ -56,6 +61,9 @@ export default function socketController(
             roomBotFiller = undefined;
 
             fillWithBot();
+
+            await sleep(5000);
+
             matchFound();
           }
 
@@ -67,11 +75,34 @@ export default function socketController(
         if (roomBotFiller) clearInterval(roomBotFiller);
         roomBotFiller = undefined;
 
+        await sleep(5000);
+
         matchFound();
       }
     }
   });
   // ### MATCHMAKING
+
+  // CANCEL MATCHMAKING
+  socket.on("cancelMatchmaking", () => {
+    usersWaiting.deleteUser(socket.id);
+    console.log(`Client with ID ${socket.id} disconnected!`);
+    userWaitingInfo();
+
+    usersWaiting.users.forEach((user: UserType) => {
+      if (!user.isBot && user.socket) {
+        user.socket.emit("findingMatch", {
+          message: "Finding Match, Please Wait",
+          members: usersWaiting.users.map((user: UserType) => ({
+            userId: user.userId,
+            userName: user.userName,
+            userAvatar: user.userAvatar,
+          })),
+        });
+      }
+    });
+  });
+  // CANCEL MATCHMAKING
 
   // ### DISCONNECT
   socket.on("disconnect", () => {
