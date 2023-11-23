@@ -1,10 +1,11 @@
 import { Server as SocketServer, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
-import sleep from 'sleep-promise';
+import sleep from "sleep-promise";
 import UsersData, { UserType } from "./data/UsersData";
 import RoomsData from "./data/RoomsData";
 
 const playerPerMatch = 3;
+const questionPerMatch = 10;
 const usersWaiting = new UsersData();
 const rooms = new RoomsData();
 
@@ -29,20 +30,9 @@ export default function socketController(
         isBot: false,
       });
       console.log(`Client with ID ${socket.id} waiting for match!`);
-      userWaitingInfo();
 
-      usersWaiting.users.forEach((user: UserType) => {
-        if (!user.isBot && user.socket) {
-          user.socket.emit("findingMatch", {
-            message: "Finding Match, Please Wait",
-            members: usersWaiting.users.map((user: UserType) => ({
-              userId: user.userId,
-              userName: user.userName,
-              userAvatar: user.userAvatar,
-            })),
-          });
-        }
-      });
+      userWaitingInfo();
+      updateInfoUserWaitingList();
 
       if (roomBotFiller === undefined) {
         let time = 60;
@@ -87,20 +77,14 @@ export default function socketController(
   socket.on("cancelMatchmaking", () => {
     usersWaiting.deleteUser(socket.id);
     console.log(`Client with ID ${socket.id} disconnected!`);
-    userWaitingInfo();
 
-    usersWaiting.users.forEach((user: UserType) => {
-      if (!user.isBot && user.socket) {
-        user.socket.emit("findingMatch", {
-          message: "Finding Match, Please Wait",
-          members: usersWaiting.users.map((user: UserType) => ({
-            userId: user.userId,
-            userName: user.userName,
-            userAvatar: user.userAvatar,
-          })),
-        });
-      }
-    });
+    if (usersWaiting.users.length === 0) {
+      if (roomBotFiller) clearInterval(roomBotFiller);
+      roomBotFiller = undefined;
+    }
+
+    userWaitingInfo();
+    updateInfoUserWaitingList();
   });
   // CANCEL MATCHMAKING
 
@@ -108,10 +92,34 @@ export default function socketController(
   socket.on("disconnect", () => {
     usersWaiting.deleteUser(socket.id);
     console.log(`Client with ID ${socket.id} disconnected!`);
+
+    if (usersWaiting.users.length === 0) {
+      if (roomBotFiller) clearInterval(roomBotFiller);
+      roomBotFiller = undefined;
+    }
+
     userWaitingInfo();
+    updateInfoUserWaitingList();
   });
   // ### DISCONNECT
 }
+
+// UPDATE USER WAITING LIST
+function updateInfoUserWaitingList() {
+  usersWaiting.users.forEach((user: UserType) => {
+    if (!user.isBot && user.socket) {
+      user.socket.emit("findingMatch", {
+        message: "Finding Match, Please Wait",
+        members: usersWaiting.users.map((user: UserType) => ({
+          userId: user.userId,
+          userName: user.userName,
+          userAvatar: user.userAvatar,
+        })),
+      });
+    }
+  });
+}
+// UPDATE USER WAITING LIST
 
 // LOG USER WAITING FOR MATCH
 function userWaitingInfo() {
@@ -135,18 +143,8 @@ function fillWithBot() {
       isBot: true,
     });
 
-    usersWaiting.users.forEach((user: UserType) => {
-      if (!user.isBot && user.socket) {
-        user.socket.emit("findingMatch", {
-          message: "Finding Match, Please Wait",
-          members: usersWaiting.users.map((user: UserType) => ({
-            userId: user.userId,
-            userName: user.userName,
-            userAvatar: user.userAvatar,
-          })),
-        });
-      }
-    });
+    userWaitingInfo();
+    updateInfoUserWaitingList();
 
     if (usersWaiting.users.length >= playerPerMatch) loop = false;
   }
