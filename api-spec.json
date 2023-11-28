@@ -215,7 +215,14 @@
                     "diamond": 0,
                     "created_at": "2023-11-11T08:56:13.959Z",
                     "updated_at": "2023-11-11T08:56:13.959Z",
-                    "avatar": null
+                    "avatar": {
+                      "id": "1e98fe0d-f02e-48fe-a210-d16308bcee1e",
+                      "avatar_url": "https://res.cloudinary.com/dogz0yvva/image/upload/v1701173057/football-quiz/yhmxkwmapgk9yw3usrir.jpg",
+                      "avatar_name": "Thomas Muller",
+                      "price": 0,
+                      "created_at": "2023-11-28T12:04:19.000Z",
+                      "updated_at": "2023-11-28T12:04:19.000Z"
+                    }
                   }
                 }
               }
@@ -420,6 +427,9 @@
                           },
                           "updated_at": {
                             "type": "string"
+                          },
+                          "owned": {
+                            "type": "boolean"
                           }
                         }
                       }
@@ -435,9 +445,10 @@
                       "id": "692dc241-d271-44cf-a330-59a4f90f121c",
                       "avatar_url": "https://res.cloudinary.com/dogz0yvva/image/upload/v1699843618/football-quiz/cbzzoidd8xc9ocxxwhnf.png",
                       "avatar_name": "Manchester United",
-                      "price": 20,
+                      "price": 1000,
                       "created_at": "2023-11-12T19:46:59.000Z",
-                      "updated_at": "2023-11-12T19:46:59.000Z"
+                      "updated_at": "2023-11-12T19:46:59.000Z",
+                      "owned": false
                     }
                   ]
                 }
