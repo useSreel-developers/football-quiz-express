@@ -194,7 +194,32 @@ async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
         io.to(user.socketId).emit("matchFound", {
           message: "Match Found",
           roomId,
-          questions,
+          questions: questions.map((question) => {
+            let correctAnswer = "";
+            if (question.correctAnswer === "A") {
+              correctAnswer = question.answerA;
+            }
+            if (question.correctAnswer === "B") {
+              correctAnswer = question.answerB;
+            }
+            if (question.correctAnswer === "C") {
+              correctAnswer = question.answerC;
+            }
+            if (question.correctAnswer === "D") {
+              correctAnswer = question.answerD;
+            }
+
+            return {
+              question: question.question,
+              options: [
+                question.answerA,
+                question.answerB,
+                question.answerC,
+                question.answerD,
+              ],
+              correct_option: correctAnswer,
+            };
+          }),
         });
       } else {
         console.log("ERROR 52637264");
