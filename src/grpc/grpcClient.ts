@@ -24,13 +24,21 @@ export interface Question {
 
 function getRandomQuestions(): Promise<Question[]> {
   return new Promise<Question[]>((resolve, reject) => {
-    client.GetRandomQuestions({}, (err: Error | null, response: Question[]) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(response);
+    client.GetRandomQuestions(
+      {},
+      (
+        err: Error | null,
+        response: {
+          questions: Question[];
+        }
+      ) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response.questions);
+        }
       }
-    });
+    );
   });
 }
 

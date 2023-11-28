@@ -1,7 +1,7 @@
 import { Server as SocketServer, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
-import _ from "lodash";
 import sleep from "sleep-promise";
+import _ from "lodash";
 import UsersData, { UserType } from "./data/UsersData";
 import RoomsData, { UserRoomtype } from "./data/RoomsData";
 import { getRandomQuestions } from "../grpc/grpcClient";
@@ -33,35 +33,37 @@ export default function socketController(
         userId,
         userName,
         userAvatar,
-        socket,
+        socketId: socket.id,
         isBot: false,
       });
       console.log(`Client with ID ${socket.id} waiting for match!`);
 
       userWaitingInfo();
-      updateInfoUserWaitingList();
+      updateInfoUserWaitingList(io);
 
       if (roomBotFiller === undefined) {
         let time = 60;
         roomBotFiller = setInterval(async () => {
           usersWaiting.users.forEach((user: UserType) => {
-            if (!user.isBot && user.socket) {
-              user.socket.emit("findingMatchCountdown", {
+            if (!user.isBot) {
+              io.to(user.socketId).emit("findingMatchCountdown", {
                 message: "Countdown Until Match Started",
                 countdownTime: time,
               });
             }
           });
 
-          if (time === 0) {
+          if (time <= 0) {
             if (roomBotFiller) clearInterval(roomBotFiller);
             roomBotFiller = undefined;
 
-            fillWithBot();
-
+            fillWithBot(io);
+            const playerSelectedToMatch = usersWaiting.users.splice(
+              0,
+              playerPerMatch
+            );
             await sleep(5000);
-
-            matchFound(io);
+            matchFound(io, playerSelectedToMatch);
           }
 
           time--;
@@ -72,15 +74,18 @@ export default function socketController(
         if (roomBotFiller) clearInterval(roomBotFiller);
         roomBotFiller = undefined;
 
+        const playerSelectedToMatch = usersWaiting.users.splice(
+          0,
+          playerPerMatch
+        );
         await sleep(5000);
-
-        matchFound(io);
+        matchFound(io, playerSelectedToMatch);
       }
     }
   });
   // ### MATCHMAKING
 
-  // CANCEL MATCHMAKING
+  // ### CANCEL MATCHMAKING
   socket.on("cancelMatchmaking", () => {
     usersWaiting.deleteUser(socket.id);
     console.log(`Client with ID ${socket.id} disconnected!`);
@@ -91,19 +96,16 @@ export default function socketController(
     }
 
     userWaitingInfo();
-    updateInfoUserWaitingList();
+    updateInfoUserWaitingList(io);
   });
-  // CANCEL MATCHMAKING
+  // ### CANCEL MATCHMAKING
 
   // STORE SCORE AND ANSWER
-  socket.on(
-    "storeScoreAndAnswer",
-    ({ userId, userAvatar, roomId, answer, score }) => {
-      if (rooms.checkRoom(roomId)) {
-        console.log("ADA");
-      }
+  socket.on("storeScore", ({ userId, userAvatar, roomId, answer, score }) => {
+    if (rooms.checkRoom(roomId)) {
+      console.log("ADA");
     }
-  );
+  });
   // STORE SCORE AND ANSWER
 
   // ### DISCONNECT
@@ -117,16 +119,16 @@ export default function socketController(
     }
 
     userWaitingInfo();
-    updateInfoUserWaitingList();
+    updateInfoUserWaitingList(io);
   });
   // ### DISCONNECT
 }
 
 // UPDATE USER WAITING LIST
-function updateInfoUserWaitingList() {
+function updateInfoUserWaitingList(io: SocketServer) {
   usersWaiting.users.forEach((user: UserType) => {
-    if (!user.isBot && user.socket) {
-      user.socket.emit("findingMatch", {
+    if (!user.isBot) {
+      io.to(user.socketId).emit("findingMatch", {
         message: "Finding Match, Please Wait",
         members: usersWaiting.users.map((user: UserType) => ({
           userId: user.userId,
@@ -149,7 +151,7 @@ function userWaitingInfo() {
 // LOG USER WAITING FOR MATCH
 
 // FILL WAITING ROOM WITH BOT
-function fillWithBot() {
+function fillWithBot(io: SocketServer) {
   let loop = true;
   while (loop) {
     const botId = uuidv4();
@@ -157,12 +159,12 @@ function fillWithBot() {
       userId: botId,
       userName: `bot_${botId.slice(0, 7)}`,
       userAvatar: null,
-      socket: null,
+      socketId: "",
       isBot: true,
     });
 
     userWaitingInfo();
-    updateInfoUserWaitingList();
+    updateInfoUserWaitingList(io);
 
     if (usersWaiting.users.length >= playerPerMatch) loop = false;
   }
@@ -170,9 +172,9 @@ function fillWithBot() {
 // FILL WAITING ROOM WITH BOT
 
 // ALL EVENT WHEN MATCH FOUND UNTIL GAME OVER
-async function matchFound(io: SocketServer) {
+async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
   const roomId = `room_${uuidv4()}`;
-  const playerSelectedToMatch = usersWaiting.users.splice(0, playerPerMatch);
+
   rooms.addRoom({
     roomId,
     members: playerSelectedToMatch.map((player) => ({
@@ -185,13 +187,18 @@ async function matchFound(io: SocketServer) {
   const questions = await getRandomQuestions();
 
   playerSelectedToMatch.forEach((user: UserType) => {
-    if (!user.isBot && user.socket) {
-      user.socket.join(roomId);
-      user.socket.emit("matchFound", {
-        message: "Match Found",
-        roomId,
-        questions,
-      });
+    if (!user.isBot) {
+      const socket = io.sockets.sockets.get(user.socketId);
+      if (socket) {
+        socket.join(roomId);
+        io.to(user.socketId).emit("matchFound", {
+          message: "Match Found",
+          roomId,
+          questions,
+        });
+      } else {
+        console.log("ERROR 52637264");
+      }
     }
   });
 
