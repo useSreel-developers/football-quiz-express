@@ -180,6 +180,7 @@ function updateInfoTemporaryAnswer(io: SocketServer, roomId: string) {
   roomSelected.members.forEach((player: UserRoomtype) => {
     if (!player.user.isBot) {
       io.to(roomId).emit("updateTemporaryAnswer", {
+        message: "Temporary Answer Update",
         temporaryAnswer: roomSelected.temporaryAnswer,
       });
     }
@@ -331,11 +332,26 @@ async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
 
   roomTime[roomId] = 10;
   roomQuestionSession[roomId] = 0;
-  roomTimers[roomId] = setInterval(roomTimersController, 1000);
+  roomTimers[roomId] = setInterval(() => {
+    roomTimersController(io, roomId);
+  }, 1000);
 
-  function roomTimersController() {
+  function roomTimersController(io: SocketServer, roomId: string) {
     if (roomQuestionSession[roomId] >= questionPerMatch) {
-      console.log("MATCH OVER");
+      io.to(roomId).emit("matchOver", {
+        message: "Match Over",
+        finalScore: rooms
+          .getRoom(roomId)
+          .members.map((player: UserRoomtype) => {
+            return {
+              userId: player.user.userId,
+              userName: player.user.userName,
+              userAvatar: player.user.userAvatar,
+              score: player.score,
+            };
+          }),
+      });
+      rooms.deleteRoom(roomId);
 
       if (roomTimers[roomId]) clearInterval(roomTimers[roomId]);
     } else {
@@ -359,13 +375,16 @@ async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
               null,
               ["A", "B", "C", "D"][_.random(0, 3)]
             );
+            rooms.changeScore(player.user.userId, roomId, _.random(0, 1000));
 
             updateInfoTemporaryAnswer(io, roomId);
           }
         });
 
         setTimeout(() => {
-          roomTimers[roomId] = setInterval(roomTimersController, 1000);
+          roomTimers[roomId] = setInterval(() => {
+            roomTimersController(io, roomId);
+          }, 1000);
         }, 5000);
       } else {
         roomTime[roomId]--;
