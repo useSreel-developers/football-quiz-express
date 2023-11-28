@@ -5,8 +5,14 @@ export type UserRoomtype = {
   score: number;
 };
 
+type TemporaryAnswer = {
+  avatar: string | null;
+  option: string;
+};
+
 export type RoomType = {
   roomId: string;
+  temporaryAnswer: TemporaryAnswer[];
   members: UserRoomtype[];
 };
 
@@ -27,12 +33,35 @@ class RoomsData {
     })[0];
   }
 
+  checkRoom(roomId: string): boolean {
+    return Boolean(this._rooms.filter((room) => room.roomId === roomId).length);
+  }
+
   addRoom(room: RoomType): void {
     this._rooms.push(room);
   }
 
   deleteRoom(roomId: string) {
     this._rooms = this._rooms.filter((room) => room.roomId !== roomId);
+  }
+
+  addTemporaryAnswer(roomId: string, userAvatar: string | null, answer: string) {
+    this._rooms = this._rooms.map((room) => {
+      if (room.roomId === roomId) {
+        return {
+          ...room,
+          temporaryAnswer: [
+            ...room.temporaryAnswer,
+            {
+              avatar: userAvatar,
+              option: answer,
+            },
+          ],
+        };
+      }
+
+      return room;
+    });
   }
 
   changeScore(userId: string, roomId: string, score: number) {

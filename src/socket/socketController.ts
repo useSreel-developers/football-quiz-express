@@ -1,8 +1,10 @@
 import { Server as SocketServer, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
+import _ from "lodash";
 import sleep from "sleep-promise";
 import UsersData, { UserType } from "./data/UsersData";
-import RoomsData from "./data/RoomsData";
+import RoomsData, { UserRoomtype } from "./data/RoomsData";
+import { getRandomQuestions } from "../grpc/grpcClient";
 
 const playerPerMatch = 3;
 const questionPerMatch = 10;
@@ -13,6 +15,11 @@ let roomBotFiller: NodeJS.Timeout | undefined = undefined;
 interface RoomTimeout {
   [key: string]: NodeJS.Timeout | undefined;
 }
+interface RoomNumberType {
+  [key: string]: number;
+}
+const roomQuestionSession: RoomNumberType = {};
+const roomTime: RoomNumberType = {};
 const roomTimers: RoomTimeout = {};
 
 export default function socketController(
@@ -54,7 +61,7 @@ export default function socketController(
 
             await sleep(5000);
 
-            matchFound();
+            matchFound(io);
           }
 
           time--;
@@ -67,7 +74,7 @@ export default function socketController(
 
         await sleep(5000);
 
-        matchFound();
+        matchFound(io);
       }
     }
   });
@@ -87,6 +94,17 @@ export default function socketController(
     updateInfoUserWaitingList();
   });
   // CANCEL MATCHMAKING
+
+  // STORE SCORE AND ANSWER
+  socket.on(
+    "storeScoreAndAnswer",
+    ({ userId, userAvatar, roomId, answer, score }) => {
+      if (rooms.checkRoom(roomId)) {
+        console.log("ADA");
+      }
+    }
+  );
+  // STORE SCORE AND ANSWER
 
   // ### DISCONNECT
   socket.on("disconnect", () => {
@@ -152,7 +170,7 @@ function fillWithBot() {
 // FILL WAITING ROOM WITH BOT
 
 // ALL EVENT WHEN MATCH FOUND UNTIL GAME OVER
-function matchFound() {
+async function matchFound(io: SocketServer) {
   const roomId = `room_${uuidv4()}`;
   const playerSelectedToMatch = usersWaiting.users.splice(0, playerPerMatch);
   rooms.addRoom({
@@ -161,7 +179,10 @@ function matchFound() {
       user: player,
       score: 0,
     })),
+    temporaryAnswer: [],
   });
+
+  const questions = await getRandomQuestions();
 
   playerSelectedToMatch.forEach((user: UserType) => {
     if (!user.isBot && user.socket) {
@@ -169,19 +190,49 @@ function matchFound() {
       user.socket.emit("matchFound", {
         message: "Match Found",
         roomId,
-        questions: [
-          {
-            question: "Saya adalah?",
-          },
-          {
-            question: "Kamu adalah?",
-          },
-          {
-            question: "Dia adalah?",
-          },
-        ],
+        questions,
       });
     }
   });
+
+  roomTime[roomId] = 10;
+  roomQuestionSession[roomId] = 0;
+  roomTimers[roomId] = setInterval(roomTimersController, 1000);
+
+  function roomTimersController() {
+    if (roomQuestionSession[roomId] >= questionPerMatch) {
+      console.log("MATCH OVER");
+
+      if (roomTimers[roomId]) clearInterval(roomTimers[roomId]);
+    } else {
+      io.to(roomId).emit("matchStarted", {
+        message: "Match Started",
+        timeRemaining: roomTime[roomId],
+      });
+
+      if (roomTime[roomId] === 0) {
+        roomTime[roomId] = 10;
+        roomQuestionSession[roomId]++;
+
+        if (roomTimers[roomId]) clearInterval(roomTimers[roomId]);
+
+        rooms.getRoom(roomId).members.forEach((player: UserRoomtype) => {
+          if (player.user.isBot) {
+            rooms.addTemporaryAnswer(
+              roomId,
+              null,
+              ["A", "B", "C", "D"][_.random(0, 3)]
+            );
+          }
+        });
+
+        setTimeout(() => {
+          roomTimers[roomId] = setInterval(roomTimersController, 1000);
+        }, 5000);
+      } else {
+        roomTime[roomId]--;
+      }
+    }
+  }
 }
 // ALL EVENT WHEN MATCH FOUND UNTIL GAME OVER

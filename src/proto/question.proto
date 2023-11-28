@@ -1,0 +1,25 @@
+syntax="proto3";
+
+package proto;
+
+option go_package = "github.com/useSreel-developers/football-quiz-grpc";
+
+message Question {
+  string id = 1;
+  string question = 2;
+  string answerA = 3;
+  string answerB = 4;
+  string answerC = 5;
+  string answerD = 6;
+  string correctAnswer = 7;
+}
+
+message Questions {
+  repeated Question questions = 1;
+}
+
+message Empty {}
+
+service QuestionService {
+  rpc GetRandomQuestions(Empty) returns (Questions) {}
+}
