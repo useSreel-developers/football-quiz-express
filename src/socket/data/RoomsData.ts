@@ -45,7 +45,11 @@ class RoomsData {
     this._rooms = this._rooms.filter((room) => room.roomId !== roomId);
   }
 
-  addTemporaryAnswer(roomId: string, userAvatar: string | null, answer: string) {
+  addTemporaryAnswer(
+    roomId: string,
+    userAvatar: string | null,
+    answer: string
+  ) {
     this._rooms = this._rooms.map((room) => {
       if (room.roomId === roomId) {
         return {
@@ -57,6 +61,19 @@ class RoomsData {
               option: answer,
             },
           ],
+        };
+      }
+
+      return room;
+    });
+  }
+
+  refreshTemporaryAnswer(roomId: string) {
+    this._rooms = this._rooms.map((room) => {
+      if (room.roomId === roomId) {
+        return {
+          ...room,
+          temporaryAnswer: [],
         };
       }
 
