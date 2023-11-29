@@ -42,7 +42,7 @@ export default function socketController(
       updateInfoUserWaitingList(io);
 
       if (roomBotFiller === undefined) {
-        let time = 60;
+        let time = 10;
         roomBotFiller = setInterval(async () => {
           usersWaiting.users.forEach((user: UserType) => {
             if (!user.isBot) {
