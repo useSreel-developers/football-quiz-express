@@ -494,6 +494,114 @@
           }
         ]
       }
+    },
+    "/winning-diamond": {
+      "put": {
+        "summary": "Winning Diamond",
+        "tags": [
+          "Diamond"
+        ],
+        "description": "This endpoint is used to update user diamond after winning a match",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "diamond": {
+                    "type": "number"
+                  }
+                }
+              },
+              "examples": {
+                "Winning 1": {
+                  "description": "Winning Diamond Example 1",
+                  "value": {
+                    "diamond": 100
+                  }
+                },
+                "Winning 2": {
+                  "description": "Winning Diamond Example 2",
+                  "value": {
+                    "diamond": 50
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Winning Diamond Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                },
+                "example": {
+                  "code": 200,
+                  "status": "success",
+                  "message": "Winning Diamond Success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 400,
+                  "status": "failed",
+                  "message": "Validation Failed",
+                  "error": "\"diamond\" is required"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Access Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 401,
+                  "status": "failed",
+                  "message": "Access Unauthorized",
+                  "error": "JWT Token Invalid"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failure"
+                },
+                "example": {
+                  "code": 500,
+                  "status": "failed",
+                  "message": "Internal Server Error",
+                  "error": "An unknown error occurred"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer Token": []
+          }
+        ]
+      }
     }
   },
   "components": {
