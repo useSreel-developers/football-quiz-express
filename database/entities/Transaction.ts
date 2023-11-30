@@ -30,7 +30,7 @@ export class Transaction {
   @Column()
   order_id!: string;
 
-  @Column('double')
+  @Column('double precision')
   gross_amount!: number;
 
   @Column()

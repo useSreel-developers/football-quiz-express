@@ -1,6 +1,7 @@
 import { Router } from "express";
-import TransactionControllers from "../controllers/TransactionControllers";
 import { jwtAuth } from "../middlewares/jwtAuth";
+
+const TransactionControllers = require("../controllers/TransactionControllers.js");
 
 const TransactionRoutes = Router();
 
