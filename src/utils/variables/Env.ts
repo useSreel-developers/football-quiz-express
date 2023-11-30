@@ -11,7 +11,6 @@ class Env {
   static DB_PASSWORD: string = process.env.DB_PASSWORD || "secret";
   static DB_NAME: string = process.env.DB_NAME || "typeorm-db";
   static JWT_SECRET: string = process.env.JWT_SECRET || "jwt_secret";
-  static GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || "google_client_id";
 }
 
 export default Env;
