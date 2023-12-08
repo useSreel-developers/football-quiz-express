@@ -18,5 +18,5 @@ export const PostgreDataSource = new DataSource({
   entities: [User, Avatar, Question],
   migrations: [MigrationFile1702028107286],
   subscribers: [],
-  ssl: Env.NODE_ENV === "prod" ? false : true,
+  ssl: Env.NODE_ENV === "prod" ? true : false,
 });
