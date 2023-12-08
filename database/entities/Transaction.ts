@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 
 @Entity("transactions")
-export class User {
+export class Transaction {
   @PrimaryColumn({ type: "uuid" })
     id!: string;
 

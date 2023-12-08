@@ -1,12 +1,13 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class MigrationFile1702028766957 implements MigrationInterface {
-    name = 'MigrationFile1702028766957'
+export class MigrationFile1702029013122 implements MigrationInterface {
+    name = 'MigrationFile1702029013122'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "avatars" ("id" uuid NOT NULL, "avatar_url" text NOT NULL, "avatar_name" character varying(50) NOT NULL, "price" integer NOT NULL DEFAULT '0', "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_224de7bae2014a1557cd9930ed7" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "users" ("id" uuid NOT NULL, "name" character varying(100) NOT NULL, "email" character varying(50) NOT NULL, "diamond" integer NOT NULL DEFAULT '0', "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "avatar_id" uuid, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "questions" ("id" uuid NOT NULL, "question" character varying(250) NOT NULL, "answer_a" character varying(100) NOT NULL, "answer_b" character varying(100) NOT NULL, "answer_c" character varying(100) NOT NULL, "answer_d" character varying(100) NOT NULL, "correct_answer" character varying(1) NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_08a6d4b0f49ff300bf3a0ca60ac" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "transactions" ("id" uuid NOT NULL, "order_id" character varying(50) NOT NULL, "gross_amount" integer NOT NULL, "name" character varying(100) NOT NULL, "email" character varying(50) NOT NULL, "diamond" integer NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_a219afd8dd77ed80f5a862f1db9" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user_avatar" ("avatar_id" uuid NOT NULL, "user_id" uuid NOT NULL, CONSTRAINT "PK_eb55b641724916df780aa4e0c53" PRIMARY KEY ("avatar_id", "user_id"))`);
         await queryRunner.query(`CREATE INDEX "IDX_48db3734242b6970badc8a75c3" ON "user_avatar" ("avatar_id") `);
         await queryRunner.query(`CREATE INDEX "IDX_90a1254abd9cce470f8cbea3b1" ON "user_avatar" ("user_id") `);
@@ -22,6 +23,7 @@ export class MigrationFile1702028766957 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "public"."IDX_90a1254abd9cce470f8cbea3b1"`);
         await queryRunner.query(`DROP INDEX "public"."IDX_48db3734242b6970badc8a75c3"`);
         await queryRunner.query(`DROP TABLE "user_avatar"`);
+        await queryRunner.query(`DROP TABLE "transactions"`);
         await queryRunner.query(`DROP TABLE "questions"`);
         await queryRunner.query(`DROP TABLE "users"`);
         await queryRunner.query(`DROP TABLE "avatars"`);
