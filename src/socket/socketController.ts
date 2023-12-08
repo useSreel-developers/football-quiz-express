@@ -4,7 +4,7 @@ import sleep from "sleep-promise";
 import _ from "lodash";
 import UsersData, { UserType } from "./data/UsersData";
 import RoomsData, { UserRoomtype } from "./data/RoomsData";
-// import { getRandomQuestions } from "../grpc/grpcClient";
+import { getRandomQuestions } from "../grpc/grpcClient";
 
 const playerPerMatch = 5;
 const questionPerMatch = 10;
@@ -201,7 +201,7 @@ async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
     temporaryAnswer: [],
   });
 
-  // const questions = await getRandomQuestions();
+  const questions = await getRandomQuestions();
 
   playerSelectedToMatch.forEach((user: UserType) => {
     if (!user.isBot) {
@@ -211,118 +211,118 @@ async function matchFound(io: SocketServer, playerSelectedToMatch: UserType[]) {
         io.to(user.socketId).emit("matchFound", {
           message: "Match Found",
           roomId,
-          // questions: questions.map((question) => {
-          //   let correctAnswer = "";
-          //   if (question.correctAnswer === "A") {
-          //     correctAnswer = question.answerA;
-          //   }
-          //   if (question.correctAnswer === "B") {
-          //     correctAnswer = question.answerB;
-          //   }
-          //   if (question.correctAnswer === "C") {
-          //     correctAnswer = question.answerC;
-          //   }
-          //   if (question.correctAnswer === "D") {
-          //     correctAnswer = question.answerD;
-          //   }
+          questions: questions.map((question) => {
+            let correctAnswer = "";
+            if (question.correctAnswer === "A") {
+              correctAnswer = question.answerA;
+            }
+            if (question.correctAnswer === "B") {
+              correctAnswer = question.answerB;
+            }
+            if (question.correctAnswer === "C") {
+              correctAnswer = question.answerC;
+            }
+            if (question.correctAnswer === "D") {
+              correctAnswer = question.answerD;
+            }
 
-          //   return {
-          //     question: question.question,
+            return {
+              question: question.question,
+              options: [
+                question.answerA,
+                question.answerB,
+                question.answerC,
+                question.answerD,
+              ],
+              correct_option: correctAnswer,
+            };
+          }),
+          // questions: [
+          //   {
+          //     question:
+          //       "Siapakah pemain sepakbola pertama yang memenangkan lima penghargaan Ballon d Or?",
           //     options: [
-          //       question.answerA,
-          //       question.answerB,
-          //       question.answerC,
-          //       question.answerD,
+          //       "Cristiano Ronaldo",
+          //       "Lionel Messi",
+          //       "Michel Platini",
+          //       "Johan Cruyff",
           //     ],
-          //     correct_option: correctAnswer,
-          //   };
-          // }),
-          questions: [
-            {
-              question:
-                "Siapakah pemain sepakbola pertama yang memenangkan lima penghargaan Ballon d Or?",
-              options: [
-                "Cristiano Ronaldo",
-                "Lionel Messi",
-                "Michel Platini",
-                "Johan Cruyff",
-              ],
-              correct_option: "Lionel Messi",
-            },
-            {
-              question:
-                "Pada tahun berapakah Piala Dunia FIFA pertama kali diadakan?",
-              options: ["1928", "1934", "1950", "1930"],
-              correct_option: "1930",
-            },
-            {
-              question:
-                "Klub sepakbola mana yang memenangkan Liga Champions UEFA musim 2020-2021?",
-              options: [
-                "Real Madrid",
-                "FC Barcelona",
-                "Manchester City",
-                "Chelsea",
-              ],
-              correct_option: "Chelsea",
-            },
-            {
-              question:
-                "Siapakah pencetak gol terbanyak sepanjang masa dalam sejarah Piala Dunia FIFA?",
-              options: [
-                "Pele",
-                "Miroslav Klose",
-                "Ronaldo Nazário",
-                "Diego Maradona",
-              ],
-              correct_option: "Miroslav Klose",
-            },
-            {
-              question:
-                "Berapa banyak pemain dalam satu tim sepakbola selama pertandingan resmi?",
-              options: ["9", "11", "13", "15"],
-              correct_option: "11",
-            },
-            {
-              question: "Apa julukan dari tim nasional sepakbola Argentina?",
-              options: ["Azzurri", "Oranje", "Albiceleste", "Samba Boys"],
-              correct_option: "Albiceleste",
-            },
-            {
-              question:
-                "Siapa pelatih yang membimbing tim nasional Prancis meraih gelar Piala Dunia FIFA pada tahun 1998?",
-              options: [
-                "Arsène Wenger",
-                "Didier Deschamps",
-                "Zinedine Zidane",
-                "Raymond Domenech",
-              ],
-              correct_option: "Didier Deschamps",
-            },
-            {
-              question:
-                "Stadion apa yang menjadi tuan rumah final Piala Dunia FIFA 2018?",
-              options: ["Maracanã", "Wembley", "Luzhniki", "Allianz Arena"],
-              correct_option: "Luzhniki",
-            },
-            {
-              question:
-                "Pemain sepakbola mana yang dijuluki The Egyptian King?",
-              options: [
-                "Mohamed Salah",
-                "Ahmed Hegazi",
-                "Mahmoud Hassan Trezeguet",
-                "Mohamed Elneny",
-              ],
-              correct_option: "Mohamed Salah",
-            },
-            {
-              question:
-                "Apa istilah yang digunakan untuk situasi ketika seorang pemain mencetak gol melalui tendangan langsung dari tendangan sudut?",
-              options: ["Hat-trick", "Free kick", "Corner kick", "Own goal"],
-              correct_option: "Corner kick",
-            },
-          ],
+          //     correct_option: "Lionel Messi",
+          //   },
+          //   {
+          //     question:
+          //       "Pada tahun berapakah Piala Dunia FIFA pertama kali diadakan?",
+          //     options: ["1928", "1934", "1950", "1930"],
+          //     correct_option: "1930",
+          //   },
+          //   {
+          //     question:
+          //       "Klub sepakbola mana yang memenangkan Liga Champions UEFA musim 2020-2021?",
+          //     options: [
+          //       "Real Madrid",
+          //       "FC Barcelona",
+          //       "Manchester City",
+          //       "Chelsea",
+          //     ],
+          //     correct_option: "Chelsea",
+          //   },
+          //   {
+          //     question:
+          //       "Siapakah pencetak gol terbanyak sepanjang masa dalam sejarah Piala Dunia FIFA?",
+          //     options: [
+          //       "Pele",
+          //       "Miroslav Klose",
+          //       "Ronaldo Nazário",
+          //       "Diego Maradona",
+          //     ],
+          //     correct_option: "Miroslav Klose",
+          //   },
+          //   {
+          //     question:
+          //       "Berapa banyak pemain dalam satu tim sepakbola selama pertandingan resmi?",
+          //     options: ["9", "11", "13", "15"],
+          //     correct_option: "11",
+          //   },
+          //   {
+          //     question: "Apa julukan dari tim nasional sepakbola Argentina?",
+          //     options: ["Azzurri", "Oranje", "Albiceleste", "Samba Boys"],
+          //     correct_option: "Albiceleste",
+          //   },
+          //   {
+          //     question:
+          //       "Siapa pelatih yang membimbing tim nasional Prancis meraih gelar Piala Dunia FIFA pada tahun 1998?",
+          //     options: [
+          //       "Arsène Wenger",
+          //       "Didier Deschamps",
+          //       "Zinedine Zidane",
+          //       "Raymond Domenech",
+          //     ],
+          //     correct_option: "Didier Deschamps",
+          //   },
+          //   {
+          //     question:
+          //       "Stadion apa yang menjadi tuan rumah final Piala Dunia FIFA 2018?",
+          //     options: ["Maracanã", "Wembley", "Luzhniki", "Allianz Arena"],
+          //     correct_option: "Luzhniki",
+          //   },
+          //   {
+          //     question:
+          //       "Pemain sepakbola mana yang dijuluki The Egyptian King?",
+          //     options: [
+          //       "Mohamed Salah",
+          //       "Ahmed Hegazi",
+          //       "Mahmoud Hassan Trezeguet",
+          //       "Mohamed Elneny",
+          //     ],
+          //     correct_option: "Mohamed Salah",
+          //   },
+          //   {
+          //     question:
+          //       "Apa istilah yang digunakan untuk situasi ketika seorang pemain mencetak gol melalui tendangan langsung dari tendangan sudut?",
+          //     options: ["Hat-trick", "Free kick", "Corner kick", "Own goal"],
+          //     correct_option: "Corner kick",
+          //   },
+          // ],
         });
       } else {
         console.log("ERROR 52637264");
