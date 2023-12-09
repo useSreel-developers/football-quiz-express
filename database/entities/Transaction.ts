@@ -25,6 +25,9 @@ export class Transaction {
 
   @Column()
     diamond!: number;
+  
+  @Column({ length: 500 })
+    status!: string;
 
   @CreateDateColumn({ type: "timestamp with time zone" })
     created_at!: Date;
